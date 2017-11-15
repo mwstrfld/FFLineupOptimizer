@@ -23,7 +23,7 @@ public:
     ~LineupOptimizerFrontEnd();
 
 protected slots:
-    void handleOptimizeButtonPressed();
+    void handleSelectRankingsButtonPressed();
 
 protected:
     // Actual UI
@@ -32,6 +32,18 @@ protected:
     // CSV Parser
     CsvParser* m_parser;
 
-    // Rankings model
-    QStandardItemModel* m_rankingsModel;
+    // Helper function for My Team model initialization
+    void initializeMyTeamModel();
+
+    // My Team model
+    QStandardItemModel* m_myTeamModel;
+
+    // Rankings models
+    QStandardItemModel* m_overallRankingsModel;
+    QStandardItemModel* m_qbRankingsModel;
+    QStandardItemModel* m_wrRankingsModel;
+    QStandardItemModel* m_rbRankingsModel;
+    QStandardItemModel* m_teRankingsModel;
+    QStandardItemModel* m_kRankingsModel;
+    QStandardItemModel* m_dstRankingsModel;
 };

@@ -23,13 +23,11 @@ public:
                         QStandardItemModel* model );
 
 protected:
-    // Helper function
-    void checkString( QString& temp,
-                      const QChar& character,
-                      QStandardItemModel* model );
-
-    // Helper list
-    QList< QStandardItem* > m_itemList;
+    // Helper functions
+    void writeLineAndBuildVector( Player::Position position,
+                                  const QStringList& line,
+                                  QStandardItemModel* model );
+    void addToVector( Player::Position position, const Player& player );
 
     // Ranking vectors
     std::vector< Player > m_overallRankings;

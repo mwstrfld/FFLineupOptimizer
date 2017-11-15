@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QStandardItem>
+#include <QStringList>
 
 
 CsvParser::CsvParser()
@@ -36,26 +37,40 @@ void CsvParser::parseRankings( Player::Position position,
             // Get rid of carriage returns
             data.remove( QRegExp( "\r" ) );
 
-            // Create temp
-            QString temp = "";
-            QChar character = '0';
+            // Local for last line
+            QStringList lastStrsInLine;
+            bool ready = false;
 
             // Read data
             QTextStream textStream( &data );
             while( !textStream.atEnd() )
             {
-                textStream >> character;
-                if( character == ',' )
-                    checkString( temp, character, model );
-                else if( character == '\n' )
-                    checkString( temp, character, model );
-                else if( textStream.atEnd() )
+                auto line = textStream.readLine();
+                if( !textStream.atEnd() )
                 {
-                    temp.append( character );
-                    checkString( temp, character, model );
+                    auto strsInLine = line.split( QChar( ',' ) );
+
+                    // Check for first row of rankings
+                    if( !QString::compare( strsInLine.at( 0 ), QStringLiteral( "1" ) ) && !ready )
+                    {
+                        // Use the last line as the headings
+                        model->setHorizontalHeaderLabels( lastStrsInLine );
+
+                        // Set ready to read the rest of the lines
+                        ready = true;
+                    }
+
+                    // Write the lines and build vectors when ready
+                    if( ready )
+                    {
+                        writeLineAndBuildVector( position, strsInLine, model );
+                    }
+                    else
+                    {
+                        // Hold onto last line
+                        lastStrsInLine = strsInLine;
+                    }
                 }
-                else
-                    temp.append( character );
             }
         }
     }
@@ -64,33 +79,83 @@ void CsvParser::parseRankings( Player::Position position,
 }
 
 
-void CsvParser::checkString( QString& temp,
-                             const QChar& character,
-                             QStandardItemModel* model )
+void CsvParser::writeLineAndBuildVector( Player::Position position,
+                                         const QStringList& line,
+                                         QStandardItemModel* model )
 {
-    if( temp.count( "\"" ) % 2 == 0 )
+    // Create the item list to add to the row
+    QList< QStandardItem* > itemList;
+
+    // Create Player instance
+    Player player( "" );
+    player.setPosition( position );
+
+    // Iterate over to append to list and build vector
+    for( auto i = 0; i < line.size(); ++i )
     {
-        if( temp.startsWith( QChar( '\"' ) ) &&
-            temp.endsWith( QChar( '\"' ) ) )
+        // Get the string
+        auto str = line.at( i );
+
+        // Create item and append to list
+        auto item = new QStandardItem( str );
+        if( i != 1 )
+            item->setTextAlignment( Qt::AlignCenter );
+        itemList.append( item );
+
+        // Fill out the player
+        switch( i )
         {
-            temp.remove( QRegExp( "^\"" ) );
-            temp.remove( QRegExp( "\"$" ) );
+        case 0: // Ranking
+            if( position == Player::Position::NONE )
+                player.setOverallRanking( str.toUInt() );
+            else
+                player.setPositionalRanking( str.toUInt() );
+            break;
+        case 1: // Name
+            player.setName( str );
+            break;
+        case 2: // Team
+            player.setTeam( str );
+            break;
+        default:
+            break;
         }
-
-        // Could possibly fail if greater than 3 repeating double quotes
-        temp.replace( "\"\"", "\"" );
-
-        auto item = new QStandardItem( temp );
-        m_itemList.append( item );
-
-        if( character != QChar( ',' ) )
-        {
-            model->appendRow( m_itemList );
-            m_itemList.clear();
-        }
-
-        temp.clear();
     }
-    else
-        temp.append( character );
+
+    // Add to model to write the line
+    model->appendRow( itemList );
+
+    // Add to the positional vector
+    addToVector( position, player );
+}
+
+
+void CsvParser::addToVector( Player::Position position, const Player& player )
+{
+    switch( position )
+    {
+    case Player::Position::NONE:
+        m_overallRankings.push_back( player );
+        break;
+    case Player::Position::QB:
+        m_qbRankings.push_back( player );
+        break;
+    case Player::Position::WR:
+        m_wrRankings.push_back( player );
+        break;
+    case Player::Position::RB:
+        m_rbRankings.push_back( player );
+        break;
+    case Player::Position::TE:
+        m_teRankings.push_back( player );
+        break;
+    case Player::Position::K:
+        m_kRankings.push_back( player );
+        break;
+    case Player::Position::DST:
+        m_dstRankings.push_back( player );
+        break;
+    default:
+        break;
+    }
 }

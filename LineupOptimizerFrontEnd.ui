@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>855</width>
-    <height>545</height>
+    <width>1016</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,251 +32,186 @@
    <string>Fantasy Football Lineup Optimizer</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableWidget" name="myTeamTableWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>241</width>
-      <height>451</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <row>
-     <property name="text">
-      <string>QB</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>WR</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>WR</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>WR</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>RB</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>RB</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>TE</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>K</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>DEF</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>BN</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>BN</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>BN</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>BN</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>BN</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>BN</string>
-     </property>
-    </row>
-    <column>
-     <property name="text">
-      <string>Player</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Remove</string>
-     </property>
-    </column>
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <property name="text">
-      <string>C. Wentz</string>
-     </property>
-    </item>
-    <item row="1" column="0">
-     <property name="text">
-      <string>A.J. Green</string>
-     </property>
-    </item>
-    <item row="2" column="0">
-     <property name="text">
-      <string>D. Hopkins</string>
-     </property>
-    </item>
-    <item row="3" column="0">
-     <property name="text">
-      <string>R. Woods</string>
-     </property>
-    </item>
-    <item row="4" column="0">
-     <property name="text">
-      <string>D. Johnson</string>
-     </property>
-    </item>
-    <item row="5" column="0">
-     <property name="text">
-      <string>K. Hunt</string>
-     </property>
-    </item>
-    <item row="6" column="0">
-     <property name="text">
-      <string>B. Watson</string>
-     </property>
-    </item>
-    <item row="7" column="0">
-     <property name="text">
-      <string>J. Tucker</string>
-     </property>
-    </item>
-    <item row="8" column="0">
-     <property name="text">
-      <string>Ravens</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QTableWidget" name="rankingsTableWidget">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>30</y>
-      <width>571</width>
-      <height>451</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="optimizeButton">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>0</y>
-      <width>85</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Optimize</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>109</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="myTeamHorizontalLayout">
-     <item>
-      <widget class="QLabel" name="myTeamLabel">
-       <property name="text">
-        <string>My Team</string>
-       </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="myTeamLabel">
+            <property name="text">
+             <string>My Team</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="myTeamHorizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="addPlayerButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="optimizeButton">
+            <property name="text">
+             <string>Optimize</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableView" name="myTeamTableView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item>
-      <spacer name="myTeamHorizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>0</y>
-      <width>107</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="rankingsLabel">
-       <property name="text">
-        <string>Rankings</string>
-       </property>
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="rankingsLabel">
+            <property name="text">
+             <string>Rankings</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="selectRankingsButton">
+            <property name="text">
+             <string>Select Rankings</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTabWidget" name="rankingsTabWidget">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="overallTab">
+           <attribute name="title">
+            <string>Overall</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QTableView" name="rankingsTableView"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="qbTab">
+           <attribute name="title">
+            <string>QB</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="wrTab">
+           <attribute name="title">
+            <string>WR</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="rbTab">
+           <attribute name="title">
+            <string>RB</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="teTab">
+           <attribute name="title">
+            <string>TE</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="kTab">
+           <attribute name="title">
+            <string>K</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="dstTab">
+           <attribute name="title">
+            <string>D/ST</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>855</width>
+     <width>1016</width>
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionClose"/>
+    <addaction name="separator"/>
+    <addaction name="actionConfigure_Settings"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionConfigure_Settings">
+   <property name="text">
+    <string>Configure Settings</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
