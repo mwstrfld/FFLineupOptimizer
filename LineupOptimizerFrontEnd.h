@@ -3,9 +3,10 @@
 
 #include <QMainWindow>
 
+#include <CsvParser.h>
+
 
 // Forward declarations
-class CsvParser;
 class QStandardItemModel;
 
 namespace Ui
