@@ -2,37 +2,39 @@
 
 
 #include <QDialog>
-#include <QTime>
+
+#include <Player.h>
 
 
 // Forward declarations
+class LineupOptimizerFrontEnd;
+
 namespace Ui
 {
-    class QuestionDialog;
+    class AddPlayerDialog;
 }
 
 
-class QuestionDialog : public QDialog
+class AddPlayerDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    QuestionDialog( QWidget* parent = 0,
-                    const QString& question = "" );
-    ~QuestionDialog();
-
-signals:
-    void answerSubmitted( QString, bool );
+    AddPlayerDialog( QWidget* parent = 0 );
+    ~AddPlayerDialog();
 
 protected slots:
-    void updateCountdown();
     void onSubmitButtonPressed();
-    void done( int );
+    void onCloseButtonPressed();
+    void handlePositionChange( int );
 
 protected:
     // Actual UI
-    Ui::QuestionDialog* m_ui;
+    Ui::AddPlayerDialog* m_ui;
 
-    // Countdown time
-    QTime m_countdown;
+    // Current player position selection
+    Player::Position m_currentPosition;
+
+    // Own reference to the LineupOptimizerFrontEnd
+    LineupOptimizerFrontEnd* m_frontEnd;
 };

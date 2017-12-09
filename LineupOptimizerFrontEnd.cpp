@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QStandardItemModel>
 
+#include <AddPlayerDialog.h>
 #include <CsvParser.h>
 #include <LineupOptimizerFrontEnd.h>
 #include <ui_LineupOptimizerFrontEnd.h>
@@ -44,6 +45,7 @@ LineupOptimizerFrontEnd::LineupOptimizerFrontEnd( QWidget* parent )
 
     // Signal/slot connections
     connect( m_ui->selectRankingsButton, SIGNAL( pressed() ), SLOT( handleSelectRankingsButtonPressed() ) );
+    connect( m_ui->addPlayerButton, SIGNAL( pressed() ), SLOT( handleAddPlayerButtonPressed() ) );
 
     // Initialize My Team
     initializeMyTeamModel();
@@ -53,6 +55,68 @@ LineupOptimizerFrontEnd::LineupOptimizerFrontEnd( QWidget* parent )
 LineupOptimizerFrontEnd::~LineupOptimizerFrontEnd()
 {
     delete m_ui;
+}
+
+
+
+QStandardItemModel* LineupOptimizerFrontEnd::getPositionModel( Player::Position pos )
+{
+    QStandardItemModel* retModel = 0;
+
+    switch( pos )
+    {
+    case Player::Position::QB:
+        retModel = m_qbRankingsModel;
+        break;
+    case Player::Position::WR:
+        retModel = m_wrRankingsModel;
+        break;
+    case Player::Position::RB:
+        retModel = m_rbRankingsModel;
+        break;
+    case Player::Position::TE:
+        retModel = m_teRankingsModel;
+        break;
+    case Player::Position::K:
+        retModel = m_qbRankingsModel;
+        break;
+    case Player::Position::DST:
+        retModel = m_dstRankingsModel;
+        break;
+    default:
+        break;
+    }
+
+    return retModel;
+}
+
+
+bool LineupOptimizerFrontEnd::addPlayerToTeam( Player::Position pos, const QString& name )
+{
+    bool retVal = false;
+
+    // TODO - Fix this hardcoded number later
+    if( m_myTeam.size() < 15 )
+    {
+        auto rankings = getRankingsForPosition( pos );
+        for( auto itr = rankings.begin(); itr != rankings.end(); ++itr )
+        {
+            if( !QString::compare( (*itr).getName(), name ) )
+            {
+                m_myTeam.push_back( *itr );
+                retVal = true;
+                break;
+            }
+        }
+    }
+
+    return retVal;
+}
+
+
+std::vector< Player >& LineupOptimizerFrontEnd::getRankingsForPosition( Player::Position pos )
+{
+    return m_parser->getRankingsForPosition( pos );
 }
 
 
@@ -111,13 +175,15 @@ void LineupOptimizerFrontEnd::handleSelectRankingsButtonPressed()
                                                      QDir::currentPath(),
                                                      "CSV (*.csv)" );
 
+    model->clear();
     m_parser->parseRankings( pos, fileName, model );
+}
 
-    /*QString debugStr = "Index: ";
-    debugStr.append( QString.arg( ind ) );
-    debugStr.append( ", File name: " );
-    debugStr.append( fileName );
-    qDebug << debugStr;*/
+
+void LineupOptimizerFrontEnd::handleAddPlayerButtonPressed()
+{
+    auto apd = new AddPlayerDialog( this );
+    apd->show();
 }
 
 

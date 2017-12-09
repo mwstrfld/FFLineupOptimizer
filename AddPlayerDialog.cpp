@@ -1,90 +1,108 @@
-#include <QuestionDialog.h>
-#include <ui_QuestionDialog.h>
+#include <AddPlayerDialog.h>
+#include <LineupOptimizerFrontEnd.h>
+#include <ui_AddPlayerDialog.h>
 
-#include <QTimer>
+#include <QCompleter>
+#include <QStandardItemModel>
+#include <QMessageBox>
 
 
-QuestionDialog::QuestionDialog( QWidget* parent,
-                                const QString& question )
+AddPlayerDialog::AddPlayerDialog( QWidget* parent )
     : QDialog( parent ),
-      m_ui( new Ui::QuestionDialog ),
-      m_countdown()
+      m_ui( new Ui::AddPlayerDialog ),
+      m_frontEnd( 0 ),
+      m_currentPosition( Player::Position::NONE )
 {
     // Parent the actual UI
     m_ui->setupUi( this );
 
-    // Set modal, can't click anything else
+    // Set modal
     setModal( true );
 
-    // Set the question
-    m_ui->questionTextBrowser->setText( question );
+    m_frontEnd = dynamic_cast< LineupOptimizerFrontEnd* >( parent );
 
-    // Set the default clock color to black
-    m_ui->clockDisplay->setPalette( Qt::black );
+    // Setup the completer for QB
+    handlePositionChange( 0 );
 
-    // Connect submit button signal/slot
-    connect( m_ui->submitButton, SIGNAL( pressed() ), SLOT( onSubmitButtonPressed() ) );
-
-    // Create a new QTimer and connect to update function
-    QTimer* timer = new QTimer( this );
-    connect( timer, SIGNAL( timeout() ), this, SLOT( updateCountdown() ) );
-
-    // Update every second
-    timer->start( 1000 );
-
-    // Initialize the countdown to one minute
-    m_countdown = QTime::fromString( "0:30", "m:ss" );
-
-    // Call for first time
-    updateCountdown();
+    // Signal/slot connections
+    connect( m_ui->submitButton, SIGNAL( pressed() ), this, SLOT( onSubmitButtonPressed() ) );
+    connect( m_ui->closeButton, SIGNAL( pressed() ), this, SLOT( onCloseButtonPressed() ) );
+    connect( m_ui->positionComboBox, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handlePositionChange( int ) ) );
 }
 
 
-QuestionDialog::~QuestionDialog()
+AddPlayerDialog::~AddPlayerDialog()
 {
     delete m_ui;
 }
 
 
-void QuestionDialog::updateCountdown()
+void AddPlayerDialog::onSubmitButtonPressed()
 {
-    // Subtract a second
-    m_countdown.setHMS( 0, 0, m_countdown.addSecs( -1 ).second() );
-
-    // Close dialog if at 0
-    if( m_countdown.second() < 1 )
+    if( m_frontEnd->addPlayerToTeam( m_currentPosition, m_ui->playerLineEdit->text() ) )
+    {
+        // Close the dialog
         close();
-
-    // Paint numbers red, if 10 seconds or less
-    if( m_countdown.second() < 11 )
-        m_ui->clockDisplay->setPalette( Qt::red );
-
-    // Get the time as text
-    QString timeStr = m_countdown.toString( "m:ss" );
-
-    // Give the illusion of a blinking time
-    if( (m_countdown.second() % 2) == 0 )
-        timeStr[ 1 ] = ' ';
-
-    // Update the display
-    m_ui->clockDisplay->display( timeStr );
+    }
+    else
+    {
+        // Unsuccessful
+        QMessageBox::question( this,
+                               "Cannot Add Player",
+                               "Your team is full or the player name did not match any of the rankings.",
+                               QMessageBox::Ok );
+    }
 }
 
 
-void QuestionDialog::onSubmitButtonPressed()
+void AddPlayerDialog::onCloseButtonPressed()
 {
-    // Close this dialog
+    // Simply close
     close();
 }
 
 
-void QuestionDialog::done( int r )
+void AddPlayerDialog::handlePositionChange( int pos )
 {
-    bool timedOut = m_countdown.second() < 1;
+    std::vector< Player >& positionVector = m_frontEnd->getRankingsForPosition( Player::Position::NONE );
 
-    // Let Jeopardy Board know the submitted answer
-    emit answerSubmitted( m_ui->answerLineEdit->text(), timedOut );
+    switch( pos )
+    {
+    case 0: // QB
+        m_currentPosition = Player::Position::QB;
+        positionVector = m_frontEnd->getRankingsForPosition( Player::Position::QB );
+        break;
+    case 1: // WR
+        m_currentPosition = Player::Position::WR;
+        positionVector = m_frontEnd->getRankingsForPosition( Player::Position::WR );
+        break;
+    case 2: // RB
+        m_currentPosition = Player::Position::RB;
+        positionVector = m_frontEnd->getRankingsForPosition( Player::Position::RB );
+        break;
+    case 3: // TE
+        m_currentPosition = Player::Position::TE;
+        positionVector = m_frontEnd->getRankingsForPosition( Player::Position::TE );
+        break;
+    case 4: // K
+        m_currentPosition = Player::Position::K;
+        positionVector = m_frontEnd->getRankingsForPosition( Player::Position::K );
+        break;
+    case 5: // D/ST
+        m_currentPosition = Player::Position::DST;
+        positionVector = m_frontEnd->getRankingsForPosition( Player::Position::DST );
+        break;
+    default:
+        break;
+    }
 
-    // Call base class
-    QDialog::done( r );
+    if( !positionVector.empty() )
+    {
+        QStringList playerNames;
+        for( auto itr = positionVector.begin(); itr != positionVector.end(); ++itr )
+            playerNames.append( (*itr).getName() );
+
+        auto completer = new QCompleter( playerNames, this );
+        m_ui->playerLineEdit->setCompleter( completer );
+    }
 }

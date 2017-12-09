@@ -22,6 +22,8 @@ public:
                         const QString& fileName,
                         QStandardItemModel* model );
 
+    std::vector< Player >& getRankingsForPosition( Player::Position pos );
+
 protected:
     // Helper functions
     void writeLineAndBuildVector( Player::Position position,

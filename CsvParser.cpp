@@ -159,3 +159,35 @@ void CsvParser::addToVector( Player::Position position, const Player& player )
         break;
     }
 }
+
+
+std::vector< Player >& CsvParser::getRankingsForPosition( Player::Position pos )
+{
+    std::vector< Player >& retVal = m_overallRankings;
+
+    switch( pos )
+    {
+    case Player::Position::QB:
+        retVal = m_qbRankings;
+        break;
+    case Player::Position::WR:
+        retVal = m_wrRankings;
+        break;
+    case Player::Position::RB:
+        retVal = m_rbRankings;
+        break;
+    case Player::Position::TE:
+        retVal = m_teRankings;
+        break;
+    case Player::Position::K:
+        retVal = m_kRankings;
+        break;
+    case Player::Position::DST:
+        retVal = m_dstRankings;
+        break;
+    default:
+        break;
+    }
+
+    return retVal;
+}

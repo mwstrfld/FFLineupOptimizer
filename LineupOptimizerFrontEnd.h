@@ -23,8 +23,14 @@ public:
     LineupOptimizerFrontEnd( QWidget* parent = 0 );
     ~LineupOptimizerFrontEnd();
 
+    QStandardItemModel* getPositionModel( Player::Position pos );
+    std::vector< Player >& getRankingsForPosition( Player::Position pos );
+
+    bool addPlayerToTeam( Player::Position pos, const QString& name );
+
 protected slots:
     void handleSelectRankingsButtonPressed();
+    void handleAddPlayerButtonPressed();
 
 protected:
     // Actual UI
@@ -36,8 +42,9 @@ protected:
     // Helper function for My Team model initialization
     void initializeMyTeamModel();
 
-    // My Team model
+    // My Team model and vector
     QStandardItemModel* m_myTeamModel;
+    std::vector< Player > m_myTeam;
 
     // Rankings models
     QStandardItemModel* m_overallRankingsModel;
