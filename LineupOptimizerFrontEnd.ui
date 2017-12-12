@@ -326,19 +326,20 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionClose"/>
+    <addaction name="configureSettingsAction"/>
     <addaction name="separator"/>
-    <addaction name="actionConfigure_Settings"/>
+    <addaction name="closeAction"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionClose">
+  <action name="closeAction">
    <property name="text">
     <string>Close</string>
    </property>
   </action>
-  <action name="actionConfigure_Settings">
+  <action name="configureSettingsAction">
    <property name="text">
     <string>Configure Settings</string>
    </property>

@@ -8,15 +8,18 @@ SOURCES  += main.cpp \
             AddPlayerDialog.cpp \
             CsvParser.cpp \
             LineupOptimizerFrontEnd.cpp \
-            Player.cpp
+            Player.cpp \
+            SettingsDialog.cpp
 
 HEADERS  += AddPlayerDialog.h \
             CsvParser.h \
             LineupOptimizerFrontEnd.h \
-            Player.h
+            Player.h \
+            SettingsDialog.h
 
 FORMS    += AddPlayerDialog.ui \
-            LineupOptimizerFrontEnd.ui
+            LineupOptimizerFrontEnd.ui \
+            SettingsDialog.ui
 
 RESOURCES = FFLineupOptimizer.qrc
 

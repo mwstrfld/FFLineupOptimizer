@@ -3,11 +3,13 @@
 
 #include <QMainWindow>
 
-#include <CsvParser.h>
+#include <Player.h>
 
 
 // Forward declarations
+class CsvParser;
 class QStandardItemModel;
+class SettingsDialog;
 
 namespace Ui
 {
@@ -29,6 +31,7 @@ public:
     bool addPlayerToTeam( Player::Position pos, const QString& name );
 
 protected slots:
+    void handleConfigureSettingsActionTriggered();
     void handleSelectRankingsButtonPressed();
     void handleAddPlayerButtonPressed();
 
@@ -38,6 +41,9 @@ protected:
 
     // CSV Parser
     CsvParser* m_parser;
+
+    // Settings Dialog
+    SettingsDialog* m_settingsDialog;
 
     // Helper function for My Team model initialization
     void initializeMyTeamModel();

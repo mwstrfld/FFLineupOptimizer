@@ -7,12 +7,15 @@
 #include <AddPlayerDialog.h>
 #include <CsvParser.h>
 #include <LineupOptimizerFrontEnd.h>
+#include <SettingsDialog.h>
 #include <ui_LineupOptimizerFrontEnd.h>
 
 
 LineupOptimizerFrontEnd::LineupOptimizerFrontEnd( QWidget* parent )
     : QMainWindow( parent ),
-      m_ui( new Ui::FFLineupOptimizerFrontEnd )
+      m_ui( new Ui::FFLineupOptimizerFrontEnd ),
+      m_parser( 0 ),
+      m_settingsDialog( 0 )
 {
     // Parent the actual UI
     m_ui->setupUi( this );
@@ -44,6 +47,8 @@ LineupOptimizerFrontEnd::LineupOptimizerFrontEnd( QWidget* parent )
     m_ui->dstRankingsTableView->setModel( m_dstRankingsModel );
 
     // Signal/slot connections
+    connect( m_ui->closeAction, SIGNAL( triggered() ), SLOT( close() ) );
+    connect( m_ui->configureSettingsAction, SIGNAL( triggered() ), SLOT( handleConfigureSettingsActionTriggered() ) );
     connect( m_ui->selectRankingsButton, SIGNAL( pressed() ), SLOT( handleSelectRankingsButtonPressed() ) );
     connect( m_ui->addPlayerButton, SIGNAL( pressed() ), SLOT( handleAddPlayerButtonPressed() ) );
 
@@ -133,6 +138,15 @@ bool LineupOptimizerFrontEnd::addPlayerToTeam( Player::Position pos, const QStri
 std::vector< Player >& LineupOptimizerFrontEnd::getRankingsForPosition( Player::Position pos )
 {
     return m_parser->getRankingsForPosition( pos );
+}
+
+
+void LineupOptimizerFrontEnd::handleConfigureSettingsActionTriggered()
+{
+    if( !m_settingsDialog )
+        m_settingsDialog = new SettingsDialog( this );
+
+    m_settingsDialog->show();
 }
 
 
