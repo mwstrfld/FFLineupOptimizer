@@ -101,14 +101,30 @@ bool LineupOptimizerFrontEnd::addPlayerToTeam( Player::Position pos, const QStri
         auto rankings = getRankingsForPosition( pos );
         for( auto itr = rankings.begin(); itr != rankings.end(); ++itr )
         {
-            if( !QString::compare( (*itr).getName(), name ) )
+            // If name exists in rankings
+            if( !QString::compare( (*itr).getName(), name, Qt::CaseInsensitive ) )
             {
-                m_myTeam.push_back( *itr );
-                retVal = true;
-                break;
+                auto findItr = std::find_if( m_myTeam.begin(),
+                                             m_myTeam.end(),
+                                             [&pos, &name](const Player& p)
+                {
+                    // If name/pos combo already exists on team
+                    return (p.getPosition() == pos) &&
+                           !QString::compare( p.getName(), name, Qt::CaseInsensitive );
+                });
+
+                // Name exists in rankings and not already on team
+                if( findItr == m_myTeam.end() )
+                {
+                    m_myTeam.push_back( *itr );
+                    retVal = true;
+                    break;
+                }
             }
         }
     }
+
+    updateMyTeamDisplay();
 
     return retVal;
 }
@@ -201,4 +217,10 @@ void LineupOptimizerFrontEnd::initializeMyTeamModel()
     QStringList vHeaders = { "QB", "WR1", "WR2", "WR3", "RB1", "RB2", "TE", "K", "DEF",
                              "BEN1", "BEN2", "BEN3", "BEN4", "BEN5", "BEN6" };
     m_myTeamModel->setVerticalHeaderLabels( vHeaders );
+}
+
+
+void LineupOptimizerFrontEnd::updateMyTeamDisplay()
+{
+
 }

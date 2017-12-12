@@ -42,6 +42,9 @@ protected:
     // Helper function for My Team model initialization
     void initializeMyTeamModel();
 
+    // Helper function for updating My Team model
+    void updateMyTeamDisplay();
+
     // My Team model and vector
     QStandardItemModel* m_myTeamModel;
     std::vector< Player > m_myTeam;

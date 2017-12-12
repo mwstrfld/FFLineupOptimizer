@@ -47,9 +47,13 @@ void AddPlayerDialog::onSubmitButtonPressed()
     else
     {
         // Unsuccessful
+        QString errorMsg = "Could not add player for one of the following reasons:\n";
+        errorMsg += "1. Your team is full\n";
+        errorMsg += "2. The entered player is already on your team\n";
+        errorMsg += "3. The entered player name did not match any names in the rankings";
         QMessageBox::question( this,
                                "Cannot Add Player",
-                               "Your team is full or the player name did not match any of the rankings.",
+                               errorMsg,
                                QMessageBox::Ok );
     }
 }
