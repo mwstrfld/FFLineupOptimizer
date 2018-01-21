@@ -51,6 +51,12 @@ protected:
     // Helper function for updating My Team model
     void updateMyTeamDisplay();
 
+    // Helper function for rebuilding team after settings are modified
+    void rebuildMyTeamAfterModifiedSettings();
+
+    // Row header count helper
+    quint8 getRowHeaderCount( const QString& str );
+
     // My Team model and vector
     QStandardItemModel* m_myTeamModel;
     std::vector< Player > m_myTeam;

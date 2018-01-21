@@ -60,6 +60,8 @@ LineupOptimizerFrontEnd::LineupOptimizerFrontEnd( QWidget* parent )
 LineupOptimizerFrontEnd::~LineupOptimizerFrontEnd()
 {
     delete m_ui;
+    delete m_parser;
+    delete m_settingsDialog;
 }
 
 
@@ -146,6 +148,14 @@ void LineupOptimizerFrontEnd::handleConfigureSettingsActionTriggered()
     if( !m_settingsDialog )
         m_settingsDialog = new SettingsDialog( this );
 
+    m_settingsDialog->setQbCount( getRowHeaderCount( "QB" ) );
+    m_settingsDialog->setWrCount( getRowHeaderCount( "WR" ) );
+    m_settingsDialog->setRbCount( getRowHeaderCount( "RB" ) );
+    m_settingsDialog->setTeCount( getRowHeaderCount( "TE" ) );
+    m_settingsDialog->setFlexCount( getRowHeaderCount( "FLX" ) );
+    m_settingsDialog->setKCount( getRowHeaderCount( "K" ) );
+    m_settingsDialog->setDstCount( getRowHeaderCount( "DST" ) );
+    m_settingsDialog->setBenchCount( getRowHeaderCount( "BEN" ) );
     m_settingsDialog->show();
 }
 
@@ -234,7 +244,47 @@ void LineupOptimizerFrontEnd::initializeMyTeamModel()
 }
 
 
+// Helper function for updating My Team model
 void LineupOptimizerFrontEnd::updateMyTeamDisplay()
 {
+    // Clear the model
+    m_myTeamModel.clear();
 
+    // Create a reference to the position model
+    QStandardItemModel* positionModel = 0;
+
+    // Loop over the team vector
+    for( auto itr = m_myTeam.begin(); itr != m_myTeam.end(); ++itr )
+    {
+        if( (*itr).getPositionalRanking() == 0 )
+        {
+            model = getPositionModel( pos );
+            if( model )
+            {
+
+            }
+        }
+    }
+}
+
+
+// Helper function for rebuilding team after settings are modified
+void LineupOptimizerFrontEnd::rebuildMyTeamAfterModifiedSettings()
+{
+
+}
+
+// Row header count helper
+quint8 LineupOptimizerFrontEnd::getRowHeaderCount( const QString& str )
+{
+    quint8 retVal = 0;
+
+    for( auto i = 0; i < m_myTeamModel->rowCount(); ++i )
+    {
+        auto testStr = m_myTeamModel->headerData( i, Qt::Vertical ).toString();
+        if( testStr.contains( str, Qt::CaseInsensitive ) )
+            ++retVal;
+    }
+
+    return retVal;
 }
