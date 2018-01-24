@@ -54,6 +54,10 @@ protected:
     // Helper function for rebuilding team after settings are modified
     void rebuildMyTeamAfterModifiedSettings();
 
+    // Helper functions for reading/writing of settings
+    void readSettings();
+    void writeSettings();
+
     // Row header count helper
     quint8 getRowHeaderCount( const QString& str );
 

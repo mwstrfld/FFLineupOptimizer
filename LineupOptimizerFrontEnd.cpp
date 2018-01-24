@@ -1,8 +1,9 @@
 #include <QCompleter>
 #include <QDebug>
-#include <QString>
 #include <QFileDialog>
+#include <QSettings>
 #include <QStandardItemModel>
+#include <QString>
 
 #include <AddPlayerDialog.h>
 #include <CsvParser.h>
@@ -248,7 +249,7 @@ void LineupOptimizerFrontEnd::initializeMyTeamModel()
 void LineupOptimizerFrontEnd::updateMyTeamDisplay()
 {
     // Clear the model
-    m_myTeamModel.clear();
+    m_myTeamModel->clear();
 
     // Create a reference to the position model
     QStandardItemModel* positionModel = 0;
@@ -258,8 +259,8 @@ void LineupOptimizerFrontEnd::updateMyTeamDisplay()
     {
         if( (*itr).getPositionalRanking() == 0 )
         {
-            model = getPositionModel( pos );
-            if( model )
+            positionModel = getPositionModel( (*itr).getPosition() );
+            if( positionModel )
             {
 
             }
@@ -287,4 +288,26 @@ quint8 LineupOptimizerFrontEnd::getRowHeaderCount( const QString& str )
     }
 
     return retVal;
+}
+
+
+// Helper functions for reading and writing of settings
+void LineupOptimizerFrontEnd::readSettings()
+{
+    QSettings settings( "Matt Westerfield", "FFLineupOptimizer" );
+
+    settings.beginGroup( "MainWindow" );
+    resize( settings.value( "size" ).toSize() );
+    move( settings.value( "position" ).toPoint() );
+    settings.endGroup();
+}
+
+void LineupOptimizerFrontEnd::writeSettings()
+{
+
+    QSettings settings( "Matt Westerfield", "FFLineupOptimizer" );
+    settings.beginGroup( "MainWindow" );
+    settings.setValue( "size", size() );
+    settings.setValue( "position", pos() );
+    settings.endGroup();
 }
