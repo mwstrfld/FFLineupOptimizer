@@ -262,7 +262,8 @@ void LineupOptimizerFrontEnd::updateMyTeamDisplay()
             positionModel = getPositionModel( (*itr).getPosition() );
             if( positionModel )
             {
-
+                // Create an item from positionModel item (?) and add to myTeamModel
+                
             }
         }
     }
